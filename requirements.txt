@@ -1,0 +1,15 @@
+pytest
+    pytest-html
+    pytest-xdist
+    pytest-asyncio
+    requests
+    python-dotenv
+    allure-pytest
+    locust
+    pytest-benchmark
+    faker
+    schemathesis
+    prance
+    openapi-spec-validator
+    jsonschema
+    

@@ -1,0 +1,1 @@
+# Wrong HTTP method tests
