@@ -1,0 +1,37 @@
+from http import HTTPStatus
+
+# Timeouts
+REQUEST_TIMEOUT = 30
+AUTH_TIMEOUT = 10
+SCHEMA_DOWNLOAD_TIMEOUT = 15
+
+# Endpoint paths
+HEALTH_ENDPOINT = "/health"
+AUTH_GENERATE_ENDPOINT = "/api/auth/generate"
+AUTH_REFRESH_ENDPOINT = "/api/auth/refresh"
+TEST_ENDPOINT_1 = "/api/test/1"
+TEST_ENDPOINT_2 = "/api/test/2"
+TEST_ENDPOINT_3 = "/api/test/3"
+TEST_ENDPOINT_4 = "/api/test/4"
+TEST_ENDPOINT_5 = "/api/test/5"
+TEST_ENDPOINT_6 = "/api/test/6"
+
+# Schema paths
+# OPENAPI_JSON_ENDPOINT = "/openapi.json"
+OPENAPI_YAML_ENDPOINT = "/swagger.yaml"
+SWAGGER_UI_ENDPOINT = "/swagger"
+
+# Schema storage
+SCHEMA_DIR = "data/schemas"
+SCHEMA_FILE = "openapi_schema.json"
+
+# Test configuration
+ENDPOINT_3_WARMUP_TIME = 10
+ENDPOINT_3_COOLDOWN_TIME = 300
+
+# HTTP Status Codes
+HTTP_OK = HTTPStatus.OK
+HTTP_UNAUTHORIZED = HTTPStatus.UNAUTHORIZED
+HTTP_TOO_MANY_REQUESTS = HTTPStatus.TOO_MANY_REQUESTS
+HTTP_INTERNAL_ERROR = HTTPStatus.INTERNAL_SERVER_ERROR
+HTTP_SERVICE_UNAVAILABLE = HTTPStatus.SERVICE_UNAVAILABLE
