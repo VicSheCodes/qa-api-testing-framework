@@ -2,6 +2,7 @@ import allure
 import pytest
 import requests
 import os
+import subprocess
 from allure_commons.types import AttachmentType
 from collections import defaultdict
 from http import HTTPStatus
@@ -38,6 +39,7 @@ _endpoint_results = defaultdict(lambda: {
 
 # Ptyest hooks
 
+# pytest --html=report.html --self-contained-html
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
 def pytest_runtest_makereport(item, call):
     """Hook to capture test results for logging
@@ -74,26 +76,25 @@ def pytest_runtest_makereport(item, call):
             log_test_end(test_name, "SKIPPED", duration)
             allure.dynamic.severity(allure.severity_level.TRIVIAL)
 
+def pytest_sessionfinish(session, exitstatus):
+    """
+    Hook that runs after all tests complete.
+    Automatically generates Allure report.
+    """
+    try:
+        logger.info("🔄 Generating Allure report...")
+        subprocess.run(
+            ["allure", "generate", "allure-results", "-o", "allure-report", "--clean"],
+            check=True,
+            capture_output=True
+        )
+        logger.info("✅ Allure report generated successfully in allure-report/")
+    except subprocess.CalledProcessError as e:
+        logger.error(f"❌ Failed to generate Allure report: {e.stderr.decode()}")
+    except FileNotFoundError:
+        logger.error("❌ Allure CLI not found. Install it with: npm install -g allure-commandline")
 
-# Pytest fixtures
-
-
-# @pytest.fixture(scope="session", autouse=True)
-# def allure_environment(base_url):
-#     """Add environment info to Allure report"""
-#     import os
-#     from pathlib import Path
-#
-#     allure_dir = Path("allure-results")
-#     allure_dir.mkdir(exist_ok=True)
-#
-#     env_file = allure_dir / "environment.properties"
-#     with open(env_file, 'w') as f:
-#         f.write(f"Base.URL={base_url}\n")
-#         f.write(f"Environment={'QA' if 'qa' in base_url else 'Production'}\n")
-#         f.write(f"SSL.Verify={SSL_VERIFY}\n")
-#         f.write(f"Python.Version={os.sys.version}\n")
-#
+# Fixtures
 
 @pytest.fixture(scope="session", autouse=True)
 def setup_allure_environment(base_url):
@@ -104,6 +105,7 @@ def setup_allure_environment(base_url):
     allure.dynamic.parameter("Environment", "QA" if "qa" in base_url else "Production")
     allure.dynamic.parameter("SSL Verification", SSL_VERIFY)
     allure.dynamic.parameter("Python Version", os.sys.version)
+
 @pytest.fixture(scope="session", autouse=True)
 def log_session_start():
     """Log test session start and summary at end"""
@@ -115,7 +117,6 @@ def log_session_start():
     yield
 
     _print_endpoint_discovery_summary()
-
 
 def _print_endpoint_discovery_summary():
     """Print comprehensive endpoint discovery summary with status codes"""

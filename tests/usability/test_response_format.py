@@ -1,1 +1,0 @@
-# Response format consistency

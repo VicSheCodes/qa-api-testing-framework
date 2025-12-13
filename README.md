@@ -1,4 +1,4 @@
-# API Resilience Testing Framework
+# API Testing Framework
 
 Automated testing framework for QA Home Assignment - Senior QA Engineer Assessment
 

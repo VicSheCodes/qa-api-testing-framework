@@ -1,1 +1,0 @@
-# Cross-site scripting tests

@@ -1,0 +1,4 @@
+Method,Name,Error,Occurrences
+GET,/api/test/3,CatchResponseError('Status 503'),100
+GET,/api/test/2,CatchResponseError('Status 500'),291
+GET,/api/test/4,CatchResponseError('Status 429'),159

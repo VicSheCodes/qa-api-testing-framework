@@ -6,6 +6,8 @@ locust -f tests/load/load_behaviour.py
 Open browser at http://localhost:8089 to access the Locust UI
 
 locust -f  tests/load/load_behaviour.py --users 100 --spawn-rate 10 --run-time 5m --headless
+locust -f tests/load/load_behaviour.py --users 10 --spawn-rate 5 --run-time 1m --headless
+
 """
 __test__ = False
 import os
@@ -23,6 +25,10 @@ from constants import (
     TEST_ENDPOINT_6,
     REQUEST_TIMEOUT
 )
+from utils.auth_helper import get_auth_headers
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Load from environment
 BASE_URL = os.getenv("BASE_URL", "https://qa-home-assignment.magmadevs.com")
@@ -53,7 +59,8 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_1,
-                headers={"Authorization": f"Bearer {self.token}"},
+                # headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:
@@ -67,7 +74,7 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_2,
-                headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:
@@ -81,7 +88,7 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_3,
-                headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:
@@ -95,7 +102,7 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_4,
-                headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:
@@ -109,7 +116,7 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_5,
-                headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:
@@ -123,7 +130,7 @@ class EndpointUser(HttpUser):
         if self.token:
             with self.client.get(
                 TEST_ENDPOINT_6,
-                headers={"Authorization": f"Bearer {self.token}"},
+                headers=get_auth_headers(self.token),
                 timeout=REQUEST_TIMEOUT,
                 catch_response=True
             ) as response:

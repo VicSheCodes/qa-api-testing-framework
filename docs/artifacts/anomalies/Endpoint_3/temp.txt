@@ -1,0 +1,83 @@
+Circuit Breaker Pattern :
+A circuit breaker is a design pattern that prevents cascading failures in distributed systems:
+
+# Circuit Breaker States:
+CLOSED  → Service works normally
+OPEN    → Service blocks all requests (fails fast)
+HALF_OPEN → Service tries to recover
+
+
+How it works:
+1. Normal Operation (CLOSED):
+   - All requests are sent to the service.
+   - If the service responds successfully, everything continues as normal.
+   - If a request fails, the failure count is incremented.
+   - If the failure count exceeds a predefined threshold, the circuit breaker transitions to the OPEN state
+2. Failure Handling (OPEN):
+    - All requests are immediately failed without sending them to the service.
+    - After a predefined timeout period, the circuit breaker transitions to the HALF_OPEN state.
+3. Recovery Attempt (HALF_OPEN):
+    - A limited number of requests are allowed to pass through to the service.
+    - If these requests succeed, the circuit breaker resets to the CLOSED state.
+    - If any of these requests fail, the circuit breaker returns to the OPEN state.
+Benefits:
+- Prevents system overload by stopping requests to a failing service.
+- Allows time for the failing service to recover.
+- Improves overall system resilience and stability.
+Implementation Steps:
+1. Define thresholds for failures and timeouts.
+2. Implement state management for the circuit breaker.
+3. Integrate the circuit breaker logic into service calls.
+4. Monitor and log circuit breaker state changes for analysis.
+Example Use Cases:
+- Microservices communication
+- External API calls
+- Database connections
+By implementing a circuit breaker, systems can gracefully handle failures and maintain overall functionality even when individual components
+are experiencing issues.
+
+┌─────────────┐
+│   CLOSED    │ ← Normal operation
+│  (working)  │
+└──────┬──────┘
+       │ Too many failures
+       ▼
+┌─────────────┐
+│    OPEN     │ ← Blocks all requests
+│  (failing)  │   Returns 503 immediately
+└──────┬──────┘
+       │ After timeout
+       ▼
+┌─────────────┐
+│ HALF-OPEN   │ ← Tests if service recovered
+│  (testing)  │   Allows some requests through
+└──────┬──────┘
+       │ If successful
+       ▼
+     CLOSED
+
+
+EP1 call → EP3 works IMMEDIATELY (not 9 seconds later)
+EP1 at request 16 → EP3 still fails for 11 more requests → recovers 9s later
+
+Initial state:
+EP1 call → Initializes session → EP3 works INSTANTLY
+
+After Overload (Rate Limited → Recovery)
+EP3 gets 13 requests → Triggers rate limit → Enters cooldown → Recovers after ~9s
+
+
+┌─────────┐
+│   EP1   │ → Creates session token/state → EP3 can access IMMEDIATELY
+└─────────┘
+
+┌─────────┐
+│   EP3   │ → Rate limit: 13 requests/~13 seconds
+└─────────┘    ↓
+               Circuit breaker opens
+               ↓
+               9-second cooldown period
+               ↓
+               Circuit breaker closes → EP3 recovers
+
+

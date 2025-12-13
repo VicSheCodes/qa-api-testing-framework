@@ -1,1 +1,0 @@
-# SQL/NoSQL injection tests
