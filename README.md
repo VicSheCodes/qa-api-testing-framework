@@ -17,7 +17,7 @@ Comprehensive test automation suite for REST API resilience testing covering:
 
 ### Prerequisites
 
-- Python 3.8+
+- Python 3.12
 - pip
 
 ### Installation

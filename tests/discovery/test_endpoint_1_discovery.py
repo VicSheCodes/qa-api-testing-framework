@@ -19,38 +19,6 @@ logger = get_test_logger()
 class TestEndpoint1AdvancedDiscovery:
     """Advanced discovery tests to find failure scenarios for endpoint 1"""
 
-    # def test_stress_rapid_fire(self, base_url, headers, test_endpoint):
-    #     """High volume rapid-fire requests to find breaking point"""
-    #     endpoint = f"{base_url}{test_endpoint}"
-    #     results = []
-    #
-    #     for i in range(100):  # 100 rapid requests
-    #         try:
-    #             response = requests.get(
-    #                 endpoint,
-    #                 headers=headers,
-    #                 verify=SSL_VERIFY,
-    #                 timeout=REQUEST_TIMEOUT
-    #             )
-    #             results.append({
-    #                 "request": i + 1,
-    #                 "status": response.status_code,
-    #                 "time": response.elapsed.total_seconds()
-    #             })
-    #         except Exception as e:
-    #             results.append({
-    #                 "request": i + 1,
-    #                 "status": "ERROR",
-    #                 "error": str(e)
-    #             })
-    #
-    #     # Analyze for failures
-    #     failures = [r for r in results if r.get("status") != HTTP_OK]
-    #     logger.info(f"Completed 100 rapid requests - Failures: {len(failures)}")
-    #
-    #     if failures:
-    #         logger.warning(f" Found failures: {failures[:5]}")
-
     def test_stress_rapid_fire(self, base_url, headers, test_endpoint):
         """High volume rapid-fire requests to find breaking point"""
         endpoint = f"{base_url}{test_endpoint}"
